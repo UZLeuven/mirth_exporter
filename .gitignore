@@ -1,2 +1,4 @@
 mirth_exporter
 *.gz
+go.mod
+go.sum
