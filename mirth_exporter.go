@@ -100,7 +100,26 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 }
 
 func (e *Exporter) fetchStatLines() ([]string, error) {
-	cmd := exec.Command("java", "-jar", e.jarPath, "-c", e.configPath)
+	cmd := exec.Command("java",
+		"--add-modules=java.sql.rowset",
+		"--add-exports=java.base/com.sun.crypto.provider=ALL-UNNAMED",
+		"--add-exports=java.base/sun.security.provider=ALL-UNNAMED",
+		"--add-opens=java.base/java.lang=ALL-UNNAMED",
+		"--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+		"--add-opens=java.base/java.math=ALL-UNNAMED",
+		"--add-opens=java.base/java.net=ALL-UNNAMED",
+		"--add-opens=java.base/java.security=ALL-UNNAMED",
+		"--add-opens=java.base/java.security.cert=ALL-UNNAMED",
+		"--add-opens=java.base/java.text=ALL-UNNAMED",
+		"--add-opens=java.base/java.util=ALL-UNNAMED",
+		"--add-opens=java.base/sun.security.pkcs=ALL-UNNAMED",
+		"--add-opens=java.base/sun.security.rsa=ALL-UNNAMED",
+		"--add-opens=java.base/sun.security.x509=ALL-UNNAMED",
+		"--add-opens=java.desktop/java.awt=ALL-UNNAMED",
+		"--add-opens=java.desktop/java.awt.color=ALL-UNNAMED",
+		"--add-opens=java.desktop/java.awt.font=ALL-UNNAMED",
+		"--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
+		"-jar", e.jarPath, "-c", e.configPath)
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		return nil, err
